@@ -1,1 +1,8 @@
 
+/ip firewall mangle 
+add action=mark-connection chain=prerouting new-connection-mark=ICMP-CONNECTION passthrough=yes protocol=icmp 
+add action=mark-packet chain=prerouting connection-mark=ICMP-CONNECTION new-packet-mark=ICMP-PACKET passthrough=no protocol=icmp 
+add action=mark-connection chain=prerouting new-connection-mark=Stable-ping passthrough=yes protocol=icmp 
+add action=mark-packet chain=prerouting connection-mark=Stable-ping new-packet-mark=Ping-Packet passthrough=no protocol=icmp
+/queue simple
+add comment="ICMP / PING Packets " max-limit=1024M/1024M name="ICMP Priotizations - Stable ping" packet-marks=ICMP-PACKET priority=4/4 target=""
