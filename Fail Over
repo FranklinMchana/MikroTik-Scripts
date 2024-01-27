@@ -1,1 +1,146 @@
-
+/ip firewall mangle
+add action=mark-connection chain=input !connection-bytes !connection-limit \
+    !connection-mark !connection-nat-state !connection-rate !connection-state \
+    !connection-type !content disabled=no !dscp !dst-address \
+    !dst-address-list !dst-address-type !dst-limit !dst-port !fragment \
+    !hotspot !icmp-options !in-bridge-port !in-bridge-port-list in-interface=\
+    ether1-KU-BAND !in-interface-list !ingress-priority !ipsec-policy \
+    !ipv4-options !layer7-protocol !limit log=no log-prefix="" \
+    new-connection-mark=ip2con !nth !out-bridge-port !out-bridge-port-list \
+    !out-interface !out-interface-list !packet-mark !packet-size passthrough=\
+    no !per-connection-classifier !port !priority !protocol !psd !random \
+    !routing-mark !routing-table !src-address !src-address-list \
+    !src-address-type !src-mac-address !src-port !tcp-flags !tcp-mss !time \
+    !tls-host !ttl
+add action=mark-connection chain=input !connection-bytes !connection-limit \
+    !connection-mark !connection-nat-state !connection-rate !connection-state \
+    !connection-type !content disabled=no !dscp !dst-address \
+    !dst-address-list !dst-address-type !dst-limit !dst-port !fragment \
+    !hotspot !icmp-options !in-bridge-port !in-bridge-port-list in-interface=\
+    ether2-KA-BAND !in-interface-list !ingress-priority !ipsec-policy \
+    !ipv4-options !layer7-protocol !limit log=no log-prefix="" \
+    new-connection-mark=ip2con !nth !out-bridge-port !out-bridge-port-list \
+    !out-interface !out-interface-list !packet-mark !packet-size passthrough=\
+    no !per-connection-classifier !port !priority !protocol !psd !random \
+    !routing-mark !routing-table !src-address !src-address-list \
+    !src-address-type !src-mac-address !src-port !tcp-flags !tcp-mss !time \
+    !tls-host !ttl
+add action=accept chain=prerouting !connection-bytes !connection-limit \
+    !connection-mark !connection-nat-state !connection-rate !connection-state \
+    !connection-type !content disabled=no !dscp dst-address=192.168.50.0/24 \
+    !dst-address-list !dst-address-type !dst-limit !dst-port !fragment \
+    !hotspot !icmp-options !in-bridge-port !in-bridge-port-list !in-interface \
+    !in-interface-list !ingress-priority !ipsec-policy !ipv4-options \
+    !layer7-protocol !limit log=no log-prefix="" !nth !out-bridge-port \
+    !out-bridge-port-list !out-interface !out-interface-list !packet-mark \
+    !packet-size !per-connection-classifier !port !priority !protocol !psd \
+    !random !routing-mark !routing-table !src-address src-address-list=LAN \
+    !src-address-type !src-mac-address !src-port !tcp-flags !tcp-mss !time \
+    !tls-host !ttl
+add action=mark-routing chain=prerouting !connection-bytes !connection-limit \
+    !connection-mark !connection-nat-state !connection-rate !connection-state \
+    !connection-type !content disabled=no !dscp !dst-address \
+    !dst-address-list !dst-address-type !dst-limit !dst-port !fragment \
+    !hotspot !icmp-options !in-bridge-port !in-bridge-port-list !in-interface \
+    !in-interface-list !ingress-priority !ipsec-policy !ipv4-options \
+    !layer7-protocol !limit log=no log-prefix="" new-routing-mark=to-ip1 !nth \
+    !out-bridge-port !out-bridge-port-list !out-interface !out-interface-list \
+    !packet-mark !packet-size passthrough=no !per-connection-classifier !port \
+    !priority !protocol !psd !random !routing-mark !routing-table \
+    src-address=192.168.50.0/24 !src-address-list !src-address-type \
+    !src-mac-address !src-port !tcp-flags !tcp-mss !time !tls-host !ttl
+add action=mark-routing chain=output !connection-bytes !connection-limit \
+    connection-mark=ip1con !connection-nat-state !connection-rate \
+    !connection-state !connection-type !content disabled=no !dscp \
+    !dst-address !dst-address-list !dst-address-type !dst-limit !dst-port \
+    !fragment !hotspot !icmp-options !in-bridge-port !in-bridge-port-list \
+    !in-interface !in-interface-list !ingress-priority !ipsec-policy \
+    !ipv4-options !layer7-protocol !limit log=no log-prefix="" \
+    new-routing-mark=to-ip1 !nth !out-bridge-port !out-bridge-port-list \
+    !out-interface !out-interface-list !packet-mark !packet-size passthrough=\
+    no !per-connection-classifier !port !priority !protocol !psd !random \
+    !routing-mark !routing-table !src-address !src-address-list \
+    !src-address-type !src-mac-address !src-port !tcp-flags !tcp-mss !time \
+    !tls-host !ttl
+add action=mark-routing chain=output !connection-bytes !connection-limit \
+    connection-mark=ip2con !connection-nat-state !connection-rate \
+    !connection-state !connection-type !content disabled=no !dscp \
+    !dst-address !dst-address-list !dst-address-type !dst-limit !dst-port \
+    !fragment !hotspot !icmp-options !in-bridge-port !in-bridge-port-list \
+    !in-interface !in-interface-list !ingress-priority !ipsec-policy \
+    !ipv4-options !layer7-protocol !limit log=no log-prefix="" \
+    new-routing-mark=to-ip2 !nth !out-bridge-port !out-bridge-port-list \
+    !out-interface !out-interface-list !packet-mark !packet-size passthrough=\
+    no !per-connection-classifier !port !priority !protocol !psd !random \
+    !routing-mark !routing-table !src-address !src-address-list \
+    !src-address-type !src-mac-address !src-port !tcp-flags !tcp-mss !time \
+    !tls-host !ttl
+/ip firewall nat
+add action=masquerade chain=srcnat !connection-bytes !connection-limit \
+    !connection-mark !connection-rate !connection-type !content disabled=no \
+    !dscp !dst-address !dst-address-list !dst-address-type !dst-limit \
+    !dst-port !fragment !hotspot !icmp-options !in-bridge-port \
+    !in-bridge-port-list !in-interface !in-interface-list !ingress-priority \
+    !ipsec-policy !ipv4-options !layer7-protocol !limit log=no log-prefix="" \
+    !nth !out-bridge-port !out-bridge-port-list out-interface=ether1-KU-BAND \
+    !out-interface-list !packet-mark !packet-size !per-connection-classifier \
+    !port !priority !protocol !psd !random !routing-mark !routing-table \
+    !src-address !src-address-list !src-address-type !src-mac-address \
+    !src-port !tcp-mss !time !tls-host !to-addresses !to-ports !ttl
+add action=masquerade chain=srcnat !connection-bytes !connection-limit \
+    !connection-mark !connection-rate !connection-type !content disabled=no \
+    !dscp !dst-address !dst-address-list !dst-address-type !dst-limit \
+    !dst-port !fragment !hotspot !icmp-options !in-bridge-port \
+    !in-bridge-port-list !in-interface !in-interface-list !ingress-priority \
+    !ipsec-policy !ipv4-options !layer7-protocol !limit log=no log-prefix="" \
+    !nth !out-bridge-port !out-bridge-port-list out-interface=ether2-KA-BAND \
+    !out-interface-list !packet-mark !packet-size !per-connection-classifier \
+    !port !priority !protocol !psd !random !routing-mark !routing-table \
+    !src-address src-address-list="block LAN" !src-address-type \
+    !src-mac-address !src-port !tcp-mss !time !tls-host !to-addresses \
+    !to-ports !ttl
+add action=masquerade chain=srcnat !connection-bytes !connection-limit \
+    !connection-mark !connection-rate !connection-type !content disabled=yes \
+    !dscp !dst-address !dst-address-list !dst-address-type !dst-limit \
+    !dst-port !fragment !hotspot !icmp-options !in-bridge-port \
+    !in-bridge-port-list !in-interface !in-interface-list !ingress-priority \
+    !ipsec-policy !ipv4-options !layer7-protocol !limit log=no log-prefix="" \
+    !nth !out-bridge-port !out-bridge-port-list !out-interface \
+    !out-interface-list !packet-mark !packet-size !per-connection-classifier \
+    !port !priority !protocol !psd !random !routing-mark !routing-table \
+    src-address=192.168.50.0/24 src-address-list="block LAN" \
+    !src-address-type !src-mac-address !src-port !tcp-mss !time !tls-host \
+    !to-addresses !to-ports !ttl
+/ip route
+add !bgp-as-path !bgp-atomic-aggregate !bgp-communities !bgp-local-pref \
+    !bgp-med !bgp-origin !bgp-prepend !check-gateway comment=KA-BAND \
+    disabled=no distance=1 dst-address=0.0.0.0/0 gateway=192.168.0.1 \
+    !route-tag routing-mark=to-ip1 scope=30 target-scope=10
+add !bgp-as-path !bgp-atomic-aggregate !bgp-communities !bgp-local-pref \
+    !bgp-med !bgp-origin !bgp-prepend !check-gateway comment=KU-BAND \
+    disabled=no distance=2 dst-address=0.0.0.0/0 gateway=102.22.234.165 \
+    !route-tag routing-mark=to-ip1 scope=30 target-scope=10
+add !bgp-as-path !bgp-atomic-aggregate !bgp-communities !bgp-local-pref \
+    !bgp-med !bgp-origin !bgp-prepend !check-gateway comment=KU-BAND \
+    disabled=no distance=1 dst-address=0.0.0.0/0 gateway=102.22.234.165 \
+    !route-tag routing-mark=to-ip2 scope=30 target-scope=10
+add !bgp-as-path !bgp-atomic-aggregate !bgp-communities !bgp-local-pref \
+    !bgp-med !bgp-origin !bgp-prepend !check-gateway comment=KA-BAND \
+    disabled=no distance=2 dst-address=0.0.0.0/0 gateway=192.168.0.1 \
+    !route-tag routing-mark=to-ip2 scope=30 target-scope=10
+add !bgp-as-path !bgp-atomic-aggregate !bgp-communities !bgp-local-pref \
+    !bgp-med !bgp-origin !bgp-prepend check-gateway=ping disabled=no \
+    distance=1 dst-address=0.0.0.0/0 gateway=192.168.0.1 !route-tag \
+    !routing-mark scope=30 target-scope=10
+add !bgp-as-path !bgp-atomic-aggregate !bgp-communities !bgp-local-pref \
+    !bgp-med !bgp-origin !bgp-prepend check-gateway=ping disabled=no \
+    distance=2 dst-address=0.0.0.0/0 gateway=102.22.234.165 !route-tag \
+    !routing-mark scope=30 target-scope=10
+add !bgp-as-path !bgp-atomic-aggregate !bgp-communities !bgp-local-pref \
+    !bgp-med !bgp-origin !bgp-prepend !check-gateway comment=KU-BAND \
+    disabled=no distance=1 dst-address=8.8.4.4/32 gateway=102.22.234.165 \
+    !route-tag !routing-mark scope=30 target-scope=10
+add !bgp-as-path !bgp-atomic-aggregate !bgp-communities !bgp-local-pref \
+    !bgp-med !bgp-origin !bgp-prepend !check-gateway comment=KA-BAND \
+    disabled=no distance=1 dst-address=8.8.8.8/32 gateway=192.168.0.1 \
+    !route-tag !routing-mark scope=30 target-scope=10
