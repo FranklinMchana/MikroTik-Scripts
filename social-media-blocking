@@ -1,0 +1,86 @@
+/ip firewall raw
+add action=add-dst-to-address-list address-list=IP-Facebook \
+    address-list-timeout=none-dynamic chain=prerouting comment=FACEBOOK \
+    content=.facebook.com dst-address-list=!IP-LAN src-address-list=IP-LAN
+add action=add-dst-to-address-list address-list=IP-Facebook \
+    address-list-timeout=none-dynamic chain=prerouting content=.m.me \
+    dst-address-list=IP-LAN src-address-list=IP-LAN
+add action=add-dst-to-address-list address-list=IP-Facebook \
+    address-list-timeout=none-dynamic chain=prerouting content=.messenger.com \
+    dst-address-list=IP-LAN src-address-list=IP-LAN
+add action=add-dst-to-address-list address-list=IP-Facebook \
+    address-list-timeout=none-dynamic chain=prerouting content=.facebook.net \
+    dst-address-list=IP-LAN src-address-list=IP-LAN
+add action=add-dst-to-address-list address-list=IP-Facebook \
+    address-list-timeout=none-dynamic chain=prerouting content=.fbcdn.net \
+    dst-address-list=IP-LAN src-address-list=IP-LAN
+add action=add-dst-to-address-list address-list=IP-Facebook \
+    address-list-timeout=none-dynamic chain=prerouting content=.fbsbk.com \
+    dst-address-list=IP-LAN src-address-list=IP-LAN
+add action=add-dst-to-address-list address-list=IP-Facebook \
+    address-list-timeout=none-dynamic chain=prerouting content=.fb.com \
+    dst-address-list=IP-LAN src-address-list=IP-LAN
+add action=add-dst-to-address-list address-list=IP-Facebook \
+    address-list-timeout=none-dynamic chain=prerouting content=.fb.gg \
+    dst-address-list=IP-LAN src-address-list=IP-LAN
+add action=add-dst-to-address-list address-list=IP-Facebook \
+    address-list-timeout=none-dynamic chain=prerouting content=.fbwat.ch \
+    dst-address-list=IP-LAN src-address-list=IP-LAN
+add action=add-dst-to-address-list address-list=IP-YOUTUBE \
+    address-list-timeout=none-dynamic chain=prerouting comment=YOUTUBE \
+    content=.youtube.com dst-address-list=!IP-LAN src-address-list=IP-LAN
+add action=add-dst-to-address-list address-list=IP-YOUTUBE \
+    address-list-timeout=none-dynamic chain=prerouting content=\
+    .youtube.google.com dst-address-list=!IP-LAN src-address-list=IP-LAN
+add action=add-dst-to-address-list address-list=IP-YOUTUBE \
+    address-list-timeout=none-dynamic chain=prerouting content=\
+    .googlevideo.com dst-address-list=!IP-LAN src-address-list=IP-LAN
+add action=add-dst-to-address-list address-list=IP-YOUTUBE \
+    address-list-timeout=none-dynamic chain=prerouting content=yting.com \
+    dst-address-list=!IP-LAN src-address-list=IP-LAN
+add action=add-dst-to-address-list address-list=IP-YOUTUBE \
+    address-list-timeout=none-dynamic chain=prerouting content=youtube.be \
+    dst-address-list=!IP-LAN src-address-list=IP-LAN
+add action=add-dst-to-address-list address-list=IP-TIKTOK \
+    address-list-timeout=none-dynamic chain=prerouting comment=TIKTOK \
+    content=.tiktok.com dst-address-list=!IP-LAN src-address-list=IP-LAN
+add action=add-dst-to-address-list address-list=IP-TIKTOK \
+    address-list-timeout=none-dynamic chain=prerouting content=.tiktokcdn.com \
+    dst-address-list=!IP-LAN src-address-list=IP-LAN
+add action=add-dst-to-address-list address-list=IP-TIKTOK \
+    address-list-timeout=none-dynamic chain=prerouting content=.ibyteimg.com \
+    dst-address-list=!IP-LAN src-address-list=IP-LAN
+add action=add-dst-to-address-list address-list=IP-TIKTOK \
+    address-list-timeout=none-dynamic chain=prerouting content=.ibytedtos.com \
+    dst-address-list=!IP-LAN src-address-list=IP-LAN
+add action=add-dst-to-address-list address-list=IP-TIKTOK \
+    address-list-timeout=none-dynamic chain=prerouting content=.mycloud.com \
+    dst-address-list=!IP-LAN src-address-list=IP-LAN
+add action=add-dst-to-address-list address-list=IP-INSTAGRAM \
+    address-list-timeout=none-dynamic chain=prerouting comment=INSTAGRAM \
+    content=.instagram.com dst-address-list=!IP-LAN src-address-list=IP-LAN
+add action=add-dst-to-address-list address-list=IP-INSTAGRAM \
+    address-list-timeout=none-dynamic chain=prerouting content=\
+    .cdninstagram.com dst-address-list=IP-LAN src-address-list=IP-LAN
+/ip firewall address-list
+add address=192.168.100.0/24 list=IP-LAN
+/ip firewall filter
+add action=passthrough chain=unused-hs-chain comment=\
+    "place hotspot rules here" disabled=yes
+add action=accept chain=forward comment="Allow Facebook" dst-address-list=\
+    IP-Facebook src-address-list="Allowed IP"
+add action=drop chain=forward comment="DROP FACEBOOK" dst-address-list=\
+    IP-Facebook src-address-list=IP-LAN time=7h-16h,mon,tue,wed,thu,fri,sat
+add action=accept chain=forward comment="Allow Youtube" dst-address-list=\
+    IP-YOUTUBE src-address-list="Allowed IP"
+add action=drop chain=forward comment="DROP YOUTUBE" dst-address-list=\
+    IP-YOUTUBE src-address-list=IP-LAN time=7h-16h,mon,tue,wed,thu,fri,sat
+add action=accept chain=forward comment="Allow Tiktok" dst-address-list=\
+    IP-TIKTOK src-address-list="Allowed IP"
+add action=drop chain=forward comment="DROP TIKTOK" dst-address-list=\
+    IP-TIKTOK src-address-list=IP-LAN time=7h-16h,sun,mon,tue,wed,thu,fri,sat
+add action=accept chain=forward comment="Allow Instagram" dst-address-list=\
+    IP-INSTAGRAM src-address-list="Allowed IP"
+add action=drop chain=forward comment="DROP INSTAGRAM" dst-address-list=\
+    IP-INSTAGRAM src-address-list=IP-LAN time=\
+    7h-16h,sun,mon,tue,wed,thu,fri,sat
