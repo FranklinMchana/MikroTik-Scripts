@@ -1,0 +1,3 @@
+/ip firewall address-list add list=gmail address=mail.google.com
+/ip firewall mangle add action=mark-packet chain=forward src-address-list=gmail new-packet-mark=gmail_traffic passthrough=yes
+/queue tree add name=gmail parent=global packet-mark=gmail_traffic limit-at=10M max-limit=20M
