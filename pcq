@@ -1,0 +1,3 @@
+/queue type add name=PCQ-Download kind=pcq pcq-rate=0 pcq-classifier=dst-address //you can limit the maximum rate per connection by changing the rate
+/queue type add name=PCQ-Upload kind=pcq pcq-rate=0 pcq-classifier=src-address //you can limit the maximum rate per connection by changing the rate
+/queue simple add name=Total-Bandwidth target=192.168.X.0/24 max-limit=12M/12M queue=PCQ-Download/PCQ-Upload //max-rate is the maximum network bandwidth while the target is the network ID
