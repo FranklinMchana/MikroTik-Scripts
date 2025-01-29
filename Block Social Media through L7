@@ -1,0 +1,6 @@
+/ip firewall filter
+add action=drop chain=forward comment="Block-Social Media" disabled=yes layer7-protocol="Block-Social MEdia"
+add action=reject chain=output comment="Block-Social Media" disabled=yes dst-address-list=facebook reject-with=icmp-network-unreachable
+
+/ip firewall layer7-protocol
+add name="Block-Social MEdia" regexp="^.+(facebook|facebook.com|instagram|tiktok|messenger).*\$"
