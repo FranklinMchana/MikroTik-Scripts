@@ -1,3 +1,4 @@
 /ip firewall mangle
 add action=mark-routing chain=prerouting new-routing-mark=WAN2-route passthrough=yes src-address="X"
 #X === "The IP Address of the device you want to send through the WAN2 connection." 
+Edit the route also
