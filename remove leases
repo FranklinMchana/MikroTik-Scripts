@@ -1,0 +1,5 @@
+This script was used as a scheduler to clear ip leases before a dhcp exhausion script was discovered
+
+:foreach lease in=[/ip dhcp-server lease find] do={
+    /ip dhcp-server lease remove $lease
+}
