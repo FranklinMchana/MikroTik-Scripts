@@ -3,3 +3,9 @@ This script was used as a scheduler to clear ip leases before a dhcp exhausion s
 :foreach lease in=[/ip dhcp-server lease find] do={
     /ip dhcp-server lease remove $lease
 }
+
+FOR A MORE SPECIFIC SCRIP THAT ONLY CLEARS CONFLICTED ENTRIES
+
+:foreach lease in=[/ip dhcp-server lease find where status="conflict"] do={ 
+    /ip dhcp-server lease remove $lease
+}
