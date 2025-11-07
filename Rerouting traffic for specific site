@@ -1,0 +1,13 @@
+STEP 1 CREATE ADDRESS LISTS
+/ip firewall raw
+add action=add-dst-to-address-list address-list=IP-Facebook \
+    address-list-timeout=none-dynamic chain=prerouting comment=AX-Reroute \
+    content=portalgateway-islamicrelief.msappproxy.net
+ dst-address-list=!IP-LAN src-address-list=AX-IPs
+
+STEP 2 CREATE A ROUTING MARK TO SEND TRAFFIC TO
+
+ /ip firewall mangle add chain=prerouting dst-address-list=AX-IPs action=mark-routing new-routing-mark=TO_STARLINK
+
+STEP 3 CREATE A ROUTE FOR THE MARKED TRAFFIC
+/ip route add dst-address=0.0.0.0/0 gateway=192.168.1.1 routing-table=TO_STARLINK
